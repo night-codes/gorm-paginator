@@ -1,9 +1,9 @@
-# gorm-paginator
+# gorm-paginator for GORM v2
 
 ## Usage
 
 ```bash
-go get github.com/biezhi/gorm-paginator/pagination
+go get github.com/xerardoo/gorm-paginator/pagination
 ```
 
 ```go

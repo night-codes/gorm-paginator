@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/biezhi/gorm-paginator/pagination"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/xerardoo/gorm-paginator/pagination"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 // User 用户
@@ -17,25 +17,27 @@ type User struct {
 }
 
 func main() {
-	db, err := gorm.Open("sqlite3", "example.db")
-	if err == nil {
-		db.AutoMigrate(&User{})
-		count := 0
-		db.Model(User{}).Count(&count)
-		if count == 0 {
-			db.Create(User{ID: 1, UserName: "biezhi"})
-			db.Create(User{ID: 2, UserName: "rose"})
-			db.Create(User{ID: 3, UserName: "jack"})
-			db.Create(User{ID: 4, UserName: "lili"})
-			db.Create(User{ID: 5, UserName: "bob"})
-			db.Create(User{ID: 6, UserName: "tom"})
-			db.Create(User{ID: 7, UserName: "anny"})
-			db.Create(User{ID: 8, UserName: "wat"})
-			fmt.Println("Insert OK!")
-		}
-	} else {
-		fmt.Println(err)
-		return
+	db, err := gorm.Open(sqlite.Open("example.db"), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+	err = db.AutoMigrate(&User{})
+	if err != nil {
+		panic(err)
+	}
+
+	var count int64 = 0
+	db.Model(User{}).Count(&count)
+	if count == 0 {
+		db.Create(User{ID: 1, UserName: "biezhi"})
+		db.Create(User{ID: 2, UserName: "rose"})
+		db.Create(User{ID: 3, UserName: "jack"})
+		db.Create(User{ID: 4, UserName: "lili"})
+		db.Create(User{ID: 5, UserName: "bob"})
+		db.Create(User{ID: 6, UserName: "tom"})
+		db.Create(User{ID: 7, UserName: "anny"})
+		db.Create(User{ID: 8, UserName: "wat"})
+		fmt.Println("Insert OK!")
 	}
 
 	var users []User
